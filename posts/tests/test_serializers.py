@@ -55,7 +55,7 @@ class PostsSerializersTestCase(TransactionTestCase):
         paragraphs = list()
         for paragraph in self.post.paragraphs.all():
             paragraphs.append(
-                ".".join(paragraph.sentences.order_by("order").values_list("text", flat=True))
+                ". ".join(paragraph.sentences.order_by("order").values_list("text", flat=True))
             )
         expected = {
             "id": self.post.id,
@@ -64,5 +64,6 @@ class PostsSerializersTestCase(TransactionTestCase):
                 paragraphs
             ],
             "has_foul_language": self.post.has_foul_language,
+            "moderation_check_status": self.post.moderation_check_status
         }
         self.assertDictEqual(data, expected)

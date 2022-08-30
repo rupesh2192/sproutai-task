@@ -1,3 +1,8 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 dc-start: ## Start docker services declared in docker-compose.yml
 	docker-compose up -d --build --force-recreate
 
@@ -10,7 +15,12 @@ pg-availability:
 	chmod +x ./scripts/wait-for-postgres.sh
 	sh -x ./scripts/wait-for-postgres.sh
 
-tests: dc-start pg-availability
-	docker-compose exec web coverage run manage.py test -v 2
-	# docker-compose exec web coverage html
-	docker-compose exec web coverage report
+install-requirements:
+	python3.10 -m venv ./sprout-ai
+	source ./sprout-ai/bin/activate; \
+	pip install -r dev-requirements.txt
+
+tests: install-requirements
+	coverage run manage.py test -v 2
+	coverage html
+	open htmlcov/index.html

@@ -63,28 +63,30 @@ This API allows the user to check the moderation status of a Post, also call the
 ```
 
 
-## Features:
+## Highlights:
 * Near real-time moderation check using multiple threads
 * Celery tasks to run the failed API calls again and update the status in the DB
 * Unit tests with >90% coverage
 * Scalable DB modelling
 * Thin Views Fat Serializers/Models design
-* Dedicated API to trigger the moderation check on a Post.
-
+* Dedicated API to trigger the moderation check on a Post
+* Verbose logging
+* Use of `prefetch_related` to avoid additional DB queries
 
 ### Docker Set up
 Pre-requisites: Docker service must be up and running
 * Run command: `make dc-start`
 
-## Steps to use the service
+### Steps to use the service
 Pre-requisites: Docker set up must be successful
-* Refer Postman collection for API details[here](https://documenter.getpostman.com/view/4969182/VUxNQ7BL)
+* Refer Postman collection for API details [here](https://documenter.getpostman.com/view/4969182/VUxNQ7BL)
 
-### Run Unit Tests
-Pre-requisites: Docker service must be up and running
-* Run command: `make tests`, coverage report will be printed at the end
+### Run Unit Tests: Local
+Pre-Requisite: Python 3.10 installed on local, 
+* Run command: `make tests`, coverage report will be loaded in the default browser
 
 ### Possible Improvements
 * Add integration tests
-* Separate DEV and PROD requirements
-* Add MAX_ATTEMPTS restriction to stop trying the Moderation API call for same sentence.
+* Add MAX_ATTEMPTS restriction to stop trying the Moderation API calls for same sentence after certain trials.
+* Auto Generate python documentation
+* Auto generate Open API specifications
