@@ -16,6 +16,7 @@ class PostViewSet(viewsets.ModelViewSet):
         Detail action endpoint to run an ad-hoc moderation check on a Post.
         """
         instance = self.get_object()
-        moderation_check_task(post_id=instance.id)
-        instance.refresh_from_db(fields=['has_foul_language'])
+        if instance.has_foul_language is None:
+            moderation_check_task(post_id=instance.id)
+            instance.refresh_from_db(fields=['has_foul_language'])
         return super(PostViewSet, self).retrieve(request, *args, **kwargs)

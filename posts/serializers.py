@@ -41,7 +41,7 @@ class PostSerializer(ModelSerializer):
             for sentence in paragraph.split("."):
                 if sentence:
                     sentence_serializer = SentenceSerializer(
-                        data={"text": sentence, "paragraph": paragraph_instance.id, "order": sentence_order})
+                        data={"text": sentence.strip(), "paragraph": paragraph_instance.id, "order": sentence_order})
                     sentence_serializer.is_valid(raise_exception=True)
                     sentence_serializer.save()
                     sentence_order += 1
@@ -55,12 +55,12 @@ class PostSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         """
-        Custom representation of the Post data fo REST APIs.
+        Custom representation of the Post data for REST APIs.
         """
         paragraphs = list()
         for paragraph in instance.paragraphs.all():
             paragraphs.append(
-                ".".join(paragraph.sentences.order_by("order").values_list("text", flat=True))
+                ". ".join(paragraph.sentences.order_by("order").values_list("text", flat=True))
             )
         return {
             "id": instance.id,
@@ -69,4 +69,5 @@ class PostSerializer(ModelSerializer):
                 paragraphs
             ],
             "has_foul_language": instance.has_foul_language,
+            "moderation_check_status": instance.moderation_check_status,
         }

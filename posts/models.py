@@ -33,6 +33,11 @@ class Post(BaseModel):
         """
         return Sentence.objects.filter(paragraph__post=self).order_by("order")
 
+    @property
+    def moderation_check_status(self):
+        """Shows status of the moderation check for the Post"""
+        return "In Progress" if self.has_foul_language is None else "Complete"
+
 
 class Paragraph(BaseModel):
     """
